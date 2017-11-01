@@ -9,7 +9,6 @@ var session = session = require('express-session');
 var MongoClient = require('mongodb').MongoClient;
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -42,7 +41,7 @@ MongoClient.connect(db_url).then( (db) => {
     });
 
     app.use('/', index);
-    app.use('/users', users);
+
 
 // catch 404 and forward to error handler
     app.use(function (req, res, next) {
