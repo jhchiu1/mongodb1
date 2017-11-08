@@ -35,19 +35,6 @@ router.get('/task/:_id', function(req, res, next) {
         });
 
 
-/* GET completed tasks */
-router.get('/completed', function(req, res, next){
-
-    req.tasks.find( {completed:true} ).toArray()
-        .then( (docs) => {
-            res.render('tasks_completed', { title: 'Completed tasks' , tasks: docs });
-        }).catch( (err) => {
-        next(err);
-    });
-
-});
-
-
 /* POST new task */
 router.post('/add', function(req, res, next){
 
@@ -115,24 +102,27 @@ router.post('/alldone', function(req, res, next) {
 
 });
 
-/* POST task delete */
-router.post('/delete', function(req, res, next){
+/* POST all tasks as deleted */
+router.post('/alldelete', function(req, res, next){
 
-    req.tasks.findOneAndDelete( {_id : ObjectID(req.body._id) } )
-        .then( (result) => {
-        if (result.lastErrorObject.n === 1) {
-        res.direct('/');
-        } else {
-            // The task was not found. Report 404 error.
-            var notFound = Error('Task not found');
-                notFound.status = 404;
-                next(notFound);
-                }
-                })
-        .catch( (err) => {
-            next(err);
-        });
-});
+    if (result.deleted == 1) {
+        //no task text info, redirect to home page with flash message
+        req.flash('error', 'All tasks have been completed!');
+        res.redirect('/');
+    }
+
+    else {
+        req.tasks.deleteMany({completed: true})
+            .then((result) => {
+                res.redirect('/');
+            })
+            .catch((err) => {
+                next(err);
+            })
+
+    }});
+
+
 
 /* POST task delete */
 router.post('/delete', function(req, res, next){
@@ -144,7 +134,6 @@ router.post('/delete', function(req, res, next){
         notFound.status = 404;
         next(notFound);
     }
-
     else {
         req.tasks.findOneAndDelete( { _id: ObjectID(_id)} )
             .then((result) => {
