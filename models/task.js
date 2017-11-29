@@ -7,6 +7,7 @@ var taskSchema = new Schema( {
     text: String,
     completed: Boolean,
 
+
     /* Reference to the user object who created this task
     Useful if we need to access info about the user from the task. */
 

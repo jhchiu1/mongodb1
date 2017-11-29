@@ -167,5 +167,17 @@ router.post('/delete', function(req, res, next){
 
 });
 
+/* POST all tasks as deleted that belong to a specific user*/
+router.post('/alldelete', function(req, res, next){
 
+        Task.deleteMany( { creator: req.user._id, _id : req.body._id, completed : true })
+            .then( (result) => {
+                console.log("How many documents were deleted? ", result.n);
+                req.flash('info', 'All completed tasks deleted!');
+                res.redirect('/');
+            })
+            .catch( (err) => {
+                next(err);
+            })
+    });
 module.exports = router;

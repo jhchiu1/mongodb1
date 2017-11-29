@@ -11,7 +11,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var passport = require('passport');
 var passportConfig = require('./config/passport')(passport);
 
-// Set the environment variable MONGO_URL
+// Set the environment variable MONGO_URL, mine is using mlab db
 var db_url = "mongodb://dbUser:password23@ds123976.mlab.com:23976/todo";
 
 // And connect to mongoose, log success or error
